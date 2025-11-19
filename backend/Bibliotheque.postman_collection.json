@@ -1,0 +1,60 @@
+{
+	"info": {
+		"_postman_id": "d4f53bda-7967-49c4-aace-72ed87e742ea",
+		"name": "Bibliotheque",
+		"description": "projet BDD NoSQL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49352299",
+		"_collection_link": "https://lizasamujlova01-522345.postman.co/workspace/af8eef00-f70c-4f03-861b-bab01fb2ac12/collection/49352299-d4f53bda-7967-49c4-aace-72ed87e742ea?action=share&source=collection_link&creator=49352299"
+	},
+	"item": [
+		{
+			"name": "afficher livres",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "afficher utilisateurs",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "afficher categories",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "ajout livre",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Ajout categorie",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Ajout utilisateur",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
