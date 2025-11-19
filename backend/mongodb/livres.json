@@ -1,0 +1,452 @@
+[
+  {
+    "_id": 1,
+    "titre": "Introduction à MongoDB",
+    "auteur": "Jean Dupont",
+    "categorie_id": 1,
+    "annee": 2023,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 2,
+    "titre": "Python pour les débutants",
+    "auteur": "Marie Curie",
+    "categorie_id": 1,
+    "annee": 2022,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 3,
+    "titre": "Calcul différentiel",
+    "auteur": "Isaac Newton",
+    "categorie_id": 2,
+    "annee": 2018,
+    "stock": 3,
+    "disponible": true
+  },
+  {
+    "_id": 4,
+    "titre": "Mécanique Quantique",
+    "auteur": "Albert Einstein",
+    "categorie_id": 3,
+    "annee": 2019,
+    "stock": 2,
+    "disponible": true
+  },
+  {
+    "_id": 5,
+    "titre": "Les Misérables",
+    "auteur": "Victor Hugo",
+    "categorie_id": 4,
+    "annee": 1862,
+    "stock": 6,
+    "disponible": true
+  },
+  {
+    "_id": 6,
+    "titre": "Histoire de France",
+    "auteur": "Pierre Dupuis",
+    "categorie_id": 5,
+    "annee": 2020,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 7,
+    "titre": "Algèbre Linéaire",
+    "auteur": "Gilbert Strang",
+    "categorie_id": 2,
+    "annee": 2019,
+    "stock": 3,
+    "disponible": true
+  },
+  {
+    "_id": 8,
+    "titre": "Le Petit Prince",
+    "auteur": "Antoine de Saint-Exupéry",
+    "categorie_id": 1,
+    "annee": 1943,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 9,
+    "titre": "Chimie Organique",
+    "auteur": "Marie Curie",
+    "categorie_id": 6,
+    "annee": 2015,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 10,
+    "titre": "Biologie Cellulaire",
+    "auteur": "Charles Darwin",
+    "categorie_id": 7,
+    "annee": 2016,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 11,
+    "titre": "Géopolitique Moderne",
+    "auteur": "Henry Kissinger",
+    "categorie_id": 7,
+    "annee": 2020,
+    "stock": 3,
+    "disponible": true
+  },
+  {
+    "_id": 12,
+    "titre": "Économie Mondiale",
+    "auteur": "Adam Smith",
+    "categorie_id": 8,
+    "annee": 2018,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 13,
+    "titre": "Introduction à la Philosophie",
+    "auteur": "Platon",
+    "categorie_id": 9,
+    "annee": 2017,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 14,
+    "titre": "Psychologie Cognitive",
+    "auteur": "Sigmund Freud",
+    "categorie_id": 10,
+    "annee": 2019,
+    "stock": 3,
+    "disponible": true
+  },
+  {
+    "_id": 15,
+    "titre": "Histoire de l’Art",
+    "auteur": "Leonardo da Vinci",
+    "categorie_id": 11,
+    "annee": 2014,
+    "stock": 2,
+    "disponible": true
+  },
+  {
+    "_id": 16,
+    "titre": "Théorie Musicale",
+    "auteur": "Ludwig van Beethoven",
+    "categorie_id": 12,
+    "annee": 2013,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 17,
+    "titre": "Techniques Sportives",
+    "auteur": "Usain Bolt",
+    "categorie_id": 13,
+    "annee": 2021,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 18,
+    "titre": "Cuisine Française",
+    "auteur": "Paul Bocuse",
+    "categorie_id": 14,
+    "annee": 2012,
+    "stock": 6,
+    "disponible": true
+  },
+  {
+    "_id": 19,
+    "titre": "Python Avancé",
+    "auteur": "Guido van Rossum",
+    "categorie_id": 1,
+    "annee": 2021,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 20,
+    "titre": "Java pour Experts",
+    "auteur": "James Gosling",
+    "categorie_id": 1,
+    "annee": 2020,
+    "stock": 3,
+    "disponible": true
+  },
+  {
+    "_id": 21,
+    "titre": "Algèbre Abstraite",
+    "auteur": "Emmy Noether",
+    "categorie_id": 2,
+    "annee": 2019,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 22,
+    "titre": "Physique Statistique",
+    "auteur": "Ludwig Boltzmann",
+    "categorie_id": 3,
+    "annee": 2016,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 23,
+    "titre": "Roman Historique",
+    "auteur": "Ken Follett",
+    "categorie_id": 4,
+    "annee": 2018,
+    "stock": 6,
+    "disponible": true
+  },
+  {
+    "_id": 24,
+    "titre": "Histoire Contemporaine",
+    "auteur": "Jacques Le Goff",
+    "categorie_id": 5,
+    "annee": 2015,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 25,
+    "titre": "Chimie Analytique",
+    "auteur": "Dmitri Mendeleïev",
+    "categorie_id": 6,
+    "annee": 2017,
+    "stock": 3,
+    "disponible": true
+  },
+  {
+    "_id": 26,
+    "titre": "Biologie Marine",
+    "auteur": "Jacques Cousteau",
+    "categorie_id": 7,
+    "annee": 2019,
+    "stock": 2,
+    "disponible": true
+  },
+  {
+    "_id": 27,
+    "titre": "Cartographie Moderne",
+    "auteur": "Gerardus Mercator",
+    "categorie_id": 7,
+    "annee": 2014,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 28,
+    "titre": "Finance Internationale",
+    "auteur": "John Maynard Keynes",
+    "categorie_id": 8,
+    "annee": 2021,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 29,
+    "titre": "Éthique et Philosophie",
+    "auteur": "Aristote",
+    "categorie_id": 9,
+    "annee": 2013,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 30,
+    "titre": "Psychologie du Développement",
+    "auteur": "Jean Piaget",
+    "categorie_id": 10,
+    "annee": 2015,
+    "stock": 6,
+    "disponible": true
+  },
+  {
+    "_id": 31,
+    "titre": "Sculpture et Techniques",
+    "auteur": "Auguste Rodin",
+    "categorie_id": 11,
+    "annee": 2012,
+    "stock": 3,
+    "disponible": true
+  },
+  {
+    "_id": 32,
+    "titre": "Histoire de la Musique",
+    "auteur": "Wolfgang Amadeus Mozart",
+    "categorie_id": 12,
+    "annee": 2016,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 33,
+    "titre": "Yoga et Bien-être",
+    "auteur": "B.K.S. Iyengar",
+    "categorie_id": 13,
+    "annee": 2018,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 34,
+    "titre": "Recettes Végétariennes",
+    "auteur": "Ella Mills",
+    "categorie_id": 14,
+    "annee": 2020,
+    "stock": 6,
+    "disponible": true
+  },
+  {
+    "_id": 35,
+    "titre": "JavaScript Moderne",
+    "auteur": "Brendan Eich",
+    "categorie_id": 1,
+    "annee": 2021,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 36,
+    "titre": "C++ Avancé",
+    "auteur": "Bjarne Stroustrup",
+    "categorie_id": 1,
+    "annee": 2020,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 37,
+    "titre": "Statistiques et Probabilités",
+    "auteur": "Karl Pearson",
+    "categorie_id": 2,
+    "annee": 2018,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 38,
+    "titre": "Physique des Particules",
+    "auteur": "Richard Feynman",
+    "categorie_id": 3,
+    "annee": 2019,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 39,
+    "titre": "Roman Policier",
+    "auteur": "Agatha Christie",
+    "categorie_id": 4,
+    "annee": 1934,
+    "stock": 3,
+    "disponible": true
+  },
+  {
+    "_id": 40,
+    "titre": "Histoire Médiévale",
+    "auteur": "Geoffrey de Villiers",
+    "categorie_id": 5,
+    "annee": 2012,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 41,
+    "titre": "Chimie Physique",
+    "auteur": "Linus Pauling",
+    "categorie_id": 6,
+    "annee": 2016,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 42,
+    "titre": "Biologie Végétale",
+    "auteur": "Gregor Mendel",
+    "categorie_id": 7,
+    "annee": 2015,
+    "stock": 3,
+    "disponible": true
+  },
+  {
+    "_id": 43,
+    "titre": "Géographie Urbaine",
+    "auteur": "David Harvey",
+    "categorie_id": 7,
+    "annee": 2020,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 44,
+    "titre": "Macroéconomie",
+    "auteur": "Paul Samuelson",
+    "categorie_id": 8,
+    "annee": 2017,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 45,
+    "titre": "Philosophie Politique",
+    "auteur": "John Rawls",
+    "categorie_id": 9,
+    "annee": 2018,
+    "stock": 3,
+    "disponible": true
+  },
+  {
+    "_id": 46,
+    "titre": "Psychologie Sociale",
+    "auteur": "Kurt Lewin",
+    "categorie_id": 10,
+    "annee": 2016,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 47,
+    "titre": "Art Contemporain",
+    "auteur": "Damien Hirst",
+    "categorie_id": 11,
+    "annee": 2019,
+    "stock": 5,
+    "disponible": true
+  },
+  {
+    "_id": 48,
+    "titre": "Musique Classique",
+    "auteur": "Johann Sebastian Bach",
+    "categorie_id": 12,
+    "annee": 2015,
+    "stock": 6,
+    "disponible": true
+  },
+  {
+    "_id": 49,
+    "titre": "Fitness et Nutrition",
+    "auteur": "Arnold Schwarzenegger",
+    "categorie_id": 13,
+    "annee": 2021,
+    "stock": 4,
+    "disponible": true
+  },
+  {
+    "_id": 50,
+    "titre": "Cuisine Italienne",
+    "auteur": "Gennaro Contaldo",
+    "categorie_id": 14,
+    "annee": 2013,
+    "stock": 5,
+    "disponible": true
+  }
+]

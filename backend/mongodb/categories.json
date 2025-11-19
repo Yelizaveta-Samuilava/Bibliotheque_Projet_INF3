@@ -1,0 +1,102 @@
+[
+    {
+      "_id": 1,
+      "nom": "Informatique",
+      "description": "Livres sur le développement, bases de données et algorithmique"
+    },
+    {
+      "_id": 2,
+      "nom": "Mathématiques",
+      "description": "Livres de mathématiques, statistiques et logique"
+    },
+    {
+      "_id": 3,
+      "nom": "Physique",
+      "description": "Livres sur la physique théorique et expérimentale"
+    },
+    {
+      "_id": 4,
+      "nom": "Littérature",
+      "description": "Romans, essais et poésie"
+    },
+    {
+      "_id": 5,
+      "nom": "Histoire",
+      "description": "Livres sur l’histoire mondiale et locale"
+    },
+    {
+      "_id": 6,
+      "nom": "Chimie",
+      "description": "Livres sur la chimie et expériences scientifiques."
+    },
+    {
+      "_id": 7,
+      "nom": "Géographie",
+      "description": "Livres sur les cartes, territoires et géopolitique."
+    },
+    {
+      "_id": 8,
+      "nom": "Économie",
+      "description": "Livres sur l’économie, finance et commerce."
+    },
+    {
+      "_id": 9,
+      "nom": "Philosophie",
+      "description": "Réflexions philosophiques et essais intellectuels."
+    },
+    {
+      "_id": 10,
+      "nom": "Psychologie",
+      "description": "Livres sur le comportement, esprit et émotions."
+    },
+    {
+      "_id": 11,
+      "nom": "Art",
+      "description": "Livres sur la peinture, sculpture et arts visuels."
+    },
+    {
+      "_id": 12,
+      "nom": "Musique",
+      "description": "Théorie musicale, histoire et pratique."
+    },
+    {
+      "_id": 13,
+      "nom": "Sport",
+      "description": "Livres sur les sports, entraînements et techniques."
+    },
+    {
+      "_id": 14,
+      "nom": "Cuisine",
+      "description": "Recettes, gastronomie et nutrition."
+    },
+    {
+      "_id": 15,
+      "nom": "Informatique appliquée",
+      "description": "Applications pratiques de l’informatique."
+    },
+    {
+      "_id": 16,
+      "nom": "Science-fiction",
+      "description": "Romans et récits de science-fiction."
+    },
+    {
+      "_id": 17,
+      "nom": "Bandes dessinées",
+      "description": "BD, mangas et comics."
+    },
+    {
+      "_id": 18,
+      "nom": "Éducation",
+      "description": "Livres pédagogiques et didactiques."
+    },
+    {
+      "_id": 19,
+      "nom": "Droit",
+      "description": "Livres sur le droit, la législation et les règles."
+    },
+    {
+      "_id": 20,
+      "nom": "Technologie",
+      "description": "Livres sur les nouvelles technologies et l’ingénierie."
+    }
+  ]

@@ -1,0 +1,41 @@
+[{
+      "_id": 1,
+      "nom": "Martin",
+      "prenom": "Alice",
+      "email": "alice.martin@example.com",
+      "mot_de_passe": "password1",
+      "role": "etudiant"
+    },
+    {
+      "_id": 2,
+      "nom": "Bernard",
+      "prenom": "Paul",
+      "email": "paul.bernard@example.com",
+      "mot_de_passe": "password2",
+      "role": "etudiant"
+    },
+    {
+      "_id": 3,
+      "nom": "Durand",
+      "prenom": "Claire",
+      "email": "claire.durand@example.com",
+      "mot_de_passe": "password3",
+      "role": "professeur"
+    },
+    {
+      "_id": 4,
+      "nom": "Lemoine",
+      "prenom": "Marc",
+      "email": "marc.lemoine@example.com",
+      "mot_de_passe": "password4",
+      "role": "admin"
+    },
+    {
+      "_id": 5,
+      "nom": "Dupont",
+      "prenom": "Lucie",
+      "email": "lucie.dupont@example.com",
+      "mot_de_passe": "motdepasse123",
+      "role": "etudiant"
+    }
+]

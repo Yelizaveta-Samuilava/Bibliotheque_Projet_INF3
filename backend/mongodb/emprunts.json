@@ -1,0 +1,50 @@
+[
+  {
+    "_id": 1,
+    "utilisateur_id": 1,
+    "livre_id": 1,
+    "date_emprunt": "2025-10-01T00:00:00.000Z",
+    "date_retour": "2025-10-10T00:00:00.000Z",
+    "statut": "rendu"
+  },
+  {
+    "_id": 2,
+    "utilisateur_id": 2,
+    "livre_id": 2,
+    "date_emprunt": "2025-10-05T00:00:00.000Z",
+    "date_retour": null,
+    "statut": "en cours"
+  },
+  {
+    "_id": 3,
+    "utilisateur_id": 3,
+    "livre_id": 3,
+    "date_emprunt": "2025-10-02T00:00:00.000Z",
+    "date_retour": "2025-10-18T00:00:00.000Z",
+    "statut": "rendu"
+  },
+  {
+    "_id": 4,
+    "utilisateur_id": 2,
+    "livre_id": 4,
+    "date_emprunt": "2025-10-12T00:00:00.000Z",
+    "date_retour": null,
+    "statut": "en cours"
+  },
+  {
+    "_id": 5,
+    "utilisateur_id": 1,
+    "livre_id": 5,
+    "date_emprunt": "2025-09-28T00:00:00.000Z",
+    "date_retour": "2025-10-03T00:00:00.000Z",
+    "statut": "rendu"
+  },
+  {
+    "_id": 6,
+    "utilisateur_id": 4,
+    "livre_id": 6,
+    "date_emprunt": "2025-10-15T00:00:00.000Z",
+    "date_retour": null,
+    "statut": "en cours"
+  }
+]
