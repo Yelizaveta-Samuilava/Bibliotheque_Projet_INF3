@@ -1,10 +1,13 @@
-from pydantic import BaseModel
-from datetime import date
+from pydantic import BaseModel, Field
+from datetime import datetime
+from typing import Optional
 
 class Emprunt(BaseModel):
-    _id: int
+    id: int = Field(alias="_id")
     utilisateur_id: int
     livre_id: int
-    date_emprunt: date
-    date_retour: date | None
-    statut: str  # "rendu" ou "en cours"
+    date_emprunt: datetime
+    date_retour: Optional[datetime] = None
+    statut: str
+
+ 

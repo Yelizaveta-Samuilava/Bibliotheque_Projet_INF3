@@ -1,60 +1,155 @@
 {
-	"info": {
-		"_postman_id": "d4f53bda-7967-49c4-aace-72ed87e742ea",
-		"name": "Bibliotheque",
-		"description": "projet BDD NoSQL",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "49352299",
-		"_collection_link": "https://lizasamujlova01-522345.postman.co/workspace/af8eef00-f70c-4f03-861b-bab01fb2ac12/collection/49352299-d4f53bda-7967-49c4-aace-72ed87e742ea?action=share&source=collection_link&creator=49352299"
-	},
-	"item": [
-		{
-			"name": "afficher livres",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "afficher utilisateurs",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "afficher categories",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "ajout livre",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "Ajout categorie",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "Ajout utilisateur",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "name": "Bibliotheque_API",
+    "_postman_id": "a1b2c3d4-e5f6-7890-1234-abcdef987654",
+    "description": "Collection complète pour tester l’API Bibliothèque (FastAPI)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Utilisateurs",
+      "item": [
+        {
+          "name": "Afficher utilisateurs",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/utilisateurs/"
+          }
+        },
+        {
+          "name": "Ajouter utilisateur",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Lucie\",\n  \"email\": \"lucie@example.com\",\n  \"mot_de_passe\": \"pass123\",\n  \"role\": \"etudiant\"\n}"
+            },
+            "url": "{{base_url}}/utilisateurs/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Livres",
+      "item": [
+        {
+          "name": "Afficher livres",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/livres/"
+          }
+        },
+        {
+          "name": "Ajouter livre",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titre\": \"Nouveau Livre\",\n  \"auteur\": \"Auteur X\",\n  \"categorie_id\": 1,\n  \"annee\": 2024,\n  \"stock\": 5,\n  \"disponible\": true\n}"
+            },
+            "url": "{{base_url}}/livres/"
+          }
+        },
+        {
+          "name": "Recherche avancée",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/livres/search?titre=python",
+              "host": ["{{base_url}}"],
+              "path": ["livres", "search"],
+              "query": [
+                { "key": "titre", "value": "python" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Catégories",
+      "item": [
+        {
+          "name": "Afficher catégories",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/categories/"
+          }
+        },
+        {
+          "name": "Ajouter catégorie",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Informatique\",\n  \"description\": \"Base de données / Dev\"\n}"
+            },
+            "url": "{{base_url}}/categories/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Emprunts",
+      "item": [
+        {
+          "name": "Emprunter livre",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"utilisateur_id\": 1,\n  \"livre_id\": 2\n}"
+            },
+            "url": "{{base_url}}/emprunts/emprunter"
+          }
+        },
+        {
+          "name": "Rendre livre",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emprunt_id\": 1\n}"
+            },
+            "url": "{{base_url}}/emprunts/rendre"
+          }
+        },
+        {
+          "name": "Lister emprunts",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/emprunts/"
+          }
+        },
+        {
+          "name": "Emprunts en retard",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/emprunts/retards"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    }
+  ]
 }
