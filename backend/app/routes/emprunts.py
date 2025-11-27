@@ -2,9 +2,10 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from datetime import date, datetime, timedelta
 from typing import Optional, List
-
+from bson import ObjectId
+from datetime import datetime, timedelta
 from database import livres, utilisateurs, emprunts
-from models.emprunt import Emprunt  
+from models.emprunt import Emprunt
 
 router = APIRouter(
     prefix="/emprunts",
@@ -133,13 +134,16 @@ def lister_emprunts():
 
 @router.get("/retards", response_model=List[Emprunt])
 def emprunts_en_retard():
-
     limite = datetime.now() - timedelta(days=MAX_DUREE_JOURS)
 
-    retard = list(emprunts.find({
-        "statut": "en cours",
-        "date_emprunt": {"$lt": limite}
-    }))
+    # Pipeline pour convertir date_emprunt si c'est stocké en string
+    pipeline = [
+        {"$match": {"statut": "en cours"}},
+        {"$addFields": {"date_emprunt_dt": {"$toDate": "$date_emprunt"}}},
+        {"$match": {"date_emprunt_dt": {"$lt": limite}}}
+    ]
+
+    retard = list(emprunts.aggregate(pipeline))
 
     if retard:
         emprunts.update_many(

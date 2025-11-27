@@ -31,6 +31,31 @@
           }
         }
       ]
+    },{
+      "name": "Auteurs",
+      "item": [
+        {
+          "name": "Afficher auteurs",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/auteurs/"
+          }
+        },
+        {
+          "name": "Ajouter auteur",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Jean Dupont\",\n  \"pays\": \"France\",\n  \"annee_naissance\": 1980\n}"
+            },
+            "url": "{{base_url}}/auteurs/"
+          }
+        }
+      ]
     },
     {
       "name": "Livres",
@@ -144,7 +169,48 @@
           }
         }
       ]
+    },
+    {
+      "name": "Statistiques",
+      "item": [
+        {
+          "name": "Top livres empruntés",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/stats/top-livres"
+          }
+        },
+        {
+          "name": "Emprunts par catégorie",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/stats/emprunts-par-categorie"
+          }
+        },
+        {
+          "name": "Durée moyenne emprunt/utilisateur",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/stats/duree-moyenne-utilisateur"
+          }
+        },
+        {
+          "name": "Durée moyenne emprunt/livre",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/stats/duree-moyenne-livre"
+          }
+        },
+        {
+          "name": "Top auteurs empruntés",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/stats/top-auteurs"
+          }
+        }
+      ]
     }
+
   ],
   "variable": [
     {

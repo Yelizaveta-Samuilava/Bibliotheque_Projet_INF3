@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="routes">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/backend/app/routes.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

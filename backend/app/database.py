@@ -10,6 +10,7 @@ livres = db.livres
 utilisateurs = db.utilisateurs
 emprunts = db.emprunts
 categories = db.categories
+auteurs = db.auteurs
 
 
 # Création des index
@@ -17,3 +18,4 @@ livres.create_index([("categorie_id", ASCENDING)])
 livres.create_index([("titre", TEXT), ("auteur", TEXT)])
 livres.create_index([("disponible", ASCENDING), ("stock", ASCENDING)])
 utilisateurs.create_index([("email", ASCENDING)], unique=True)
+auteurs.create_index([("nom", TEXT)])

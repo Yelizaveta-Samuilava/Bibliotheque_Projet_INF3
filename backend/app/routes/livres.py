@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from database import livres
+from database import livres, auteurs
 from models.livre import Livre
 
 router = APIRouter(prefix="/livres")
@@ -28,10 +28,11 @@ from fastapi import Query
 
 #fonction pour formater un livre depuis mongodb
 def serialize_livre(l):
+    auteur = auteurs.find_one({"_id": l["auteur_id"]})
     return {
         "_id": l["_id"],
         "titre": l.get("titre"),
-        "auteur": l.get("auteur"),
+       "auteur": auteur.get("nom") if auteur else "Inconnu",
         "categorie_id": l.get("categorie_id"),
         "annee": l.get("annee"),
         "stock": l.get("stock"),
@@ -56,7 +57,11 @@ def recherche_avancee(
         #rechercher sur titre
         or_conditions.append({"titre": {"$regex": titre, "$options": "i"}})
     if auteur:
-        or_conditions.append({"auteur": {"$regex": auteur, "$options": "i"}})
+        # On fait une recherche par nom d'auteur
+        auteurs_match = list(auteurs.find({"nom": {"$regex": auteur, "$options": "i"}}))
+        if auteurs_match:
+            ids = [a["_id"] for a in auteurs_match]
+            or_conditions.append({"auteur_id": {"$in": ids}})
     
     #Recherche globale mots-clés 
     if mots_cles:

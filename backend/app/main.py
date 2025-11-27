@@ -1,15 +1,20 @@
 from fastapi import FastAPI
 from routes.utilisateurs import router as utilisateurs_router
+from routes.auteurs import router as auteurs_router
 from routes.livres import router as livres_router 
 from routes.categories import router as categories_router
 from routes.emprunts import router as emprunts_router
+from routes.aggregations import router as aggregations_router
+
 
 app = FastAPI()
 
 app.include_router(utilisateurs_router)
+app.include_router(auteurs_router)
 app.include_router(livres_router)  
 app.include_router(categories_router)
 app.include_router(emprunts_router)
+app.include_router(aggregations_router)
 
 @app.get("/")
 def home():
