@@ -132,6 +132,7 @@ def duree_moyenne_livre():
 def top_auteurs(limit: int = 5):
     try:
         pipeline = [
+            # Lier chaque emprunt au livre correspondant
             {"$lookup": {
                 "from": "livres",
                 "localField": "livre_id",
@@ -139,11 +140,26 @@ def top_auteurs(limit: int = 5):
                 "as": "livre"
             }},
             {"$unwind": "$livre"},
+
+            # Lier chaque livre à son auteur
+            {"$lookup": {
+                "from": "auteurs",
+                "localField": "livre.auteur_id",
+                "foreignField": "_id",
+                "as": "auteur"
+            }},
+            {"$unwind": "$auteur"},
+
+            # Grouper par auteur et compter le nombre d'emprunts
             {"$group": {
-                "_id": "$livre.auteur",
+                "_id": "$auteur.nom",
                 "nb_emprunts": {"$sum": 1}
             }},
+
+            # Trier par nombre d'emprunts décroissant
             {"$sort": {"nb_emprunts": -1}},
+
+            # Limiter le nombre de résultats
             {"$limit": limit}
         ]
         return list(emprunts.aggregate(pipeline))
