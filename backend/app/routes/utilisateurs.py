@@ -1,14 +1,15 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from database import utilisateurs
-from models.utilisateur import Utilisateur
+from models.utilisateur import Utilisateur, LoginUtilisateur
 
 router = APIRouter(prefix="/utilisateurs")
 
+# Récupérer tous les utilisateurs
 @router.get("/")
 def get_utilisateurs():
-    # Récupérer tous les utilisateurs
     return list(utilisateurs.find({}, {"_id": 1, "nom": 1, "prenom": 1, "email": 1, "role": 1}))
 
+# Ajouter un nouvel utilisateur (inscription)
 @router.post("/")
 def add_utilisateur(data: Utilisateur):
     # Récupérer le dernier utilisateur trié par _id décroissant
@@ -20,3 +21,11 @@ def add_utilisateur(data: Utilisateur):
     
     utilisateurs.insert_one(data_dict)
     return {"message": "Utilisateur ajouté", "id": data_dict["_id"]}
+
+# Connexion utilisateur (login)
+@router.post("/login")
+def login(data: LoginUtilisateur):
+    user = utilisateurs.find_one({"email": data.email, "mot_de_passe": data.mot_de_passe})
+    if not user:
+        raise HTTPException(status_code=401, detail="Email ou mot de passe incorrect")
+    return {"message": "Connexion réussie", "user_id": user["_id"], "role": user["role"]}
