@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
 class Auteur(BaseModel):
-    _id: int 
+    _id: int
     nom: str
-    prenom: str 
+    annee_naissance: int
+    biographie: str
