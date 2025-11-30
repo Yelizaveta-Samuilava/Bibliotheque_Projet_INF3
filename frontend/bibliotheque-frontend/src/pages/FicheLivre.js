@@ -9,8 +9,11 @@ const FicheLivre = () => {
   const [livre, setLivre] = useState(null);
   const [emprunte, setEmprunte] = useState(false); // bouton désactivé après emprunt
 
+  // Récupération du livre
   useEffect(() => {
-    fetch(`http://localhost:8000/livres/${parseInt(id)}`)
+    fetch(`http://localhost:8000/livres/${parseInt(id)}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
       .then(res => res.json())
       .then(data => {
         setLivre({
@@ -20,7 +23,7 @@ const FicheLivre = () => {
         });
       })
       .catch(err => console.error(err));
-  }, [id]);
+  }, [id, token]);
 
   const emprunterLivre = async () => {
     if (!user) {
@@ -48,10 +51,11 @@ const FicheLivre = () => {
       } else {
         alert("Livre emprunté avec succès !");
         setEmprunte(true);
+        // Mettre à jour la disponibilité et le stock en fonction de la réponse du backend
         setLivre(prev => ({
           ...prev,
-          disponible: false,
-          stock: prev.stock > 0 ? prev.stock - 1 : 0
+          disponible: data.livre_disponible !== undefined ? data.livre_disponible : false,
+          stock: data.livre_stock !== undefined ? data.livre_stock : Math.max(prev.stock - 1, 0)
         }));
       }
     } catch (err) {
@@ -64,21 +68,21 @@ const FicheLivre = () => {
 
   return (
     <div>
-    <Header />
-    <div className="fiche-livre-container">
-      <h1>{livre.titre}</h1>
-      <p><strong>Auteur :</strong> {livre.auteur}</p>
-      <p><strong>Catégorie :</strong> {livre.categorie}</p>
-      <p><strong>Année :</strong> {livre.annee}</p>
-      <p><strong>Disponibilité :</strong> {livre.disponible ? "Disponible" : "Indisponible"}</p>
-      <button 
-        disabled={!livre.disponible || emprunte} 
-        onClick={emprunterLivre}
-      >
-        {livre.disponible && !emprunte ? "Emprunter" : "Emprunté"}
-      </button>
+      <Header />
+      <div className="fiche-livre-container">
+        <h1>{livre.titre}</h1>
+        <p><strong>Auteur :</strong> {livre.auteur}</p>
+        <p><strong>Catégorie :</strong> {livre.categorie}</p>
+        <p><strong>Année :</strong> {livre.annee}</p>
+        <p><strong>Disponibilité :</strong> {livre.disponible ? "Disponible" : "Indisponible"}</p>
+        <button 
+          disabled={!livre.disponible || emprunte} 
+          onClick={emprunterLivre}
+        >
+          {livre.disponible && !emprunte ? "Emprunter" : "Emprunté"}
+        </button>
+      </div>
     </div>
-  </div>
   );
 };
 

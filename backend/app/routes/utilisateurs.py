@@ -7,7 +7,12 @@ router = APIRouter(prefix="/utilisateurs")
 # Récupérer tous les utilisateurs
 @router.get("/")
 def get_utilisateurs():
-    return list(utilisateurs.find({}, {"_id": 1, "nom": 1, "prenom": 1, "email": 1, "role": 1}))
+    return list(
+        utilisateurs.find(
+            {},
+            {"_id": 1, "nom": 1, "prenom": 1, "email": 1, "role": 1}
+        )
+    )
 
 # Ajouter un nouvel utilisateur (inscription)
 @router.post("/")
@@ -25,7 +30,13 @@ def add_utilisateur(data: Utilisateur):
 # Connexion utilisateur (login)
 @router.post("/login")
 def login(data: LoginUtilisateur):
-    user = utilisateurs.find_one({"email": data.email, "mot_de_passe": data.mot_de_passe})
+    user = utilisateurs.find_one(
+        {"email": data.email, "mot_de_passe": data.mot_de_passe},
+        {"_id": 1, "nom": 1, "prenom": 1, "email": 1, "role": 1}
+    )
     if not user:
         raise HTTPException(status_code=401, detail="Email ou mot de passe incorrect")
-    return {"message": "Connexion réussie", "user_id": user["_id"], "role": user["role"]}
+    return {
+        "message": "Connexion réussie",
+        "user": user
+    }

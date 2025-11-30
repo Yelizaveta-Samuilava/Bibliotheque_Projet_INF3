@@ -44,7 +44,15 @@ const Header = () => {
           </li>
           {user ? (
             <li>
-              <button className="logout-button" onClick={logout}>Déconnexion</button>
+              <button
+                className="logout-button"
+                onClick={() => {
+                  logout();
+                  navigate("/login");
+                }}
+              >
+                Déconnexion
+              </button>
             </li>
           ) : (
             <li>

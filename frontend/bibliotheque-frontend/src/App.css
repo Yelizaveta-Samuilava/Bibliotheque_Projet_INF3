@@ -98,6 +98,77 @@ header nav ul li .nav-link:hover {
 }
 
 /* === Catalogue dynamique === */
+
+/* === Formulaire de recherche avancée (palette marron/beige) === */
+
+.recherche-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  background: #f3e9dc; /* beige clair */
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e8d3b9;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 10px rgba(90, 62, 43, 0.15); /* marron léger */
+}
+
+.recherche-form input,
+.recherche-form select {
+  flex: 1;
+  min-width: 180px;
+  padding: 10px;
+  border: 1px solid #d4a574; /* beige doré */
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  color: #5a3e2b; /* marron texte */
+}
+
+.recherche-form input::placeholder {
+  color: #8b5e3c; /* marron moyen */
+}
+
+.recherche-form select {
+  background: #fff;
+  color: #5a3e2b;
+}
+
+/* ---- Bouton rechercher ---- */
+.recherche-btn {
+  padding: 12px 20px;
+  background-color: #8b5e3c; /* marron moyen */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+.recherche-btn:hover {
+  background-color: #5a3e2b; /* marron foncé */
+}
+
+/* ---- Bouton réinitialiser ---- */
+.reset-btn {
+  padding: 12px 20px;
+  background-color: #d4a574; /* beige doré */
+  color: #5a3e2b;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+.reset-btn:hover {
+  background-color: #8b5e3c;
+  color: #fff;
+}
+
 .catalogue-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* 5 cartes par ligne */
@@ -335,6 +406,58 @@ header nav ul li .nav-link:hover {
 }
 
 /* Partie admin : conteneur livres */
+/* Formulaire ajout livre */
+.ajout-livre-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.ajout-livre-form input {
+  flex: 1 1 150px;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.ajout-livre-form input:focus {
+  outline: none;
+  border-color: #6b4226;
+  box-shadow: 0 0 5px rgba(107, 66, 38, 0.5);
+}
+
+.ajout-livre-form button {
+  padding: 8px 16px;
+  background-color: #6b4226;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.ajout-livre-form button:hover {
+  background-color: #8c5734;
+}
+
+/* Responsive pour petits écrans */
+@media (max-width: 600px) {
+  .ajout-livre-form {
+    flex-direction: column;
+  }
+
+  .ajout-livre-form input {
+    flex: 1 1 100%;
+  }
+}
+
 .admin-livres {
   max-width: 1200px;
   margin: 30px auto;
