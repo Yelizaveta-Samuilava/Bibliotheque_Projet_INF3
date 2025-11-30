@@ -6,6 +6,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
 
+  // Trigger pour rafraîchir les pages après un emprunt ou retour
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
   // Charger les infos depuis localStorage au démarrage
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -41,12 +44,21 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Helper pour savoir si c'est un admin
-  const isAdmin = () => {
-    return user?.role === "admin";
-  };
+  const isAdmin = () => user?.role === "admin";
+
+  // Fonction pour déclencher le rafraîchissement
+  const triggerRefresh = () => setRefreshTrigger(prev => prev + 1);
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isAdmin }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      token, 
+      login, 
+      logout, 
+      isAdmin,
+      refreshTrigger,
+      triggerRefresh
+    }}>
       {children}
     </AuthContext.Provider>
   );

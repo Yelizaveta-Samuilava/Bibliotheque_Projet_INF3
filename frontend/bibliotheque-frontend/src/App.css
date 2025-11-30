@@ -24,58 +24,71 @@ header.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #8B5E3C; /* marron */
-  padding: 10px 20px;
+  background-color: #5a3e2b; /* marron foncé */
+  padding: 15px 30px;
   color: #fff;
   font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 header .logo {
-  font-size: 1.5rem;
+  font-size: 2rem;
+  color: #f5f5dc;
+  font-weight: bolder;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 header nav ul {
   display: flex;
-  gap: 15px;
+  gap: 20px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
-header nav ul li a,
-header nav ul li button {
-  color: #f5f5dc; /* beige clair */
+header nav ul li {
+  list-style: none;
+}
+
+/* Style commun pour tous les liens de nav (y compris les boutons) */
+header nav ul li .nav-link {
+  display: inline-block;
+  color: #f5f5dc;
   font-weight: bold;
   background: none;
   border: none;
+  padding: 8px 12px;
+  border-radius: 0px;
   cursor: pointer;
-}
-
-header nav ul li button:hover,
-header nav ul li a:hover {
-  text-decoration: underline;
-}
-
-/* === Footer === */
-footer.footer {
-  background-color: #8B5E3C; /* marron */
-  color: #f5f5dc; /* beige clair */
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-size: 1rem;
+  line-height: 1.5;
   text-align: center;
-  padding: 15px 0;
-  margin-top: 40px;
 }
 
-/* === Boutons === */
-button {
-  background-color: #8B5E3C;
-  color: #f5f5dc;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
-  cursor: pointer;
+header nav ul li .nav-link:hover {
+  background-color: #d2b48c;
+  color: #5a3e2b;
+  transform: scale(1.05);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Déconnexion uniquement */
+.logout-button {
+  background-color: #f5f5dc;
+  color: #5a3e2b;
   font-weight: bold;
+  border-radius: 0px;
+  padding: 8px 15px;
+  transition: all 0.3s ease;
 }
 
-button:hover {
-  background-color: #7a4f2f;
+.logout-button:hover {
+  background-color: #e0d4b7;
+  transform: scale(1.05);
 }
+
 
 /* === Pages / Containers === */
 .container {
@@ -84,40 +97,577 @@ button:hover {
   padding: 0 20px;
 }
 
-/* === Catalogue === */
-.catalogue {
+/* === Catalogue dynamique === */
+.catalogue-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(5, 1fr); /* 5 cartes par ligne */
   gap: 20px;
+  padding: 20px;
 }
 
-.catalogue h1 {
-  text-align: center;
-  color: #8B5E3C;
-  margin-bottom: 20px;
-}
-
-.catalogue p {
-  text-align: center;
-  font-style: italic;
-}
-
-/* === Carte Livre === */
 .livre-card {
-  background-color: #fffaf0; /* beige très clair */
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #fbeec1, #f6d365); /* dégradé dynamique */
+  border-radius: 0px;
   padding: 15px;
   text-align: center;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.livre-card h2 {
+.livre-card h3 {
   font-size: 1.2rem;
-  color: #8B5E3C;
+  color: #6b4226; /* marron foncé pour le titre */
   margin-bottom: 10px;
 }
 
 .livre-card p {
-  margin: 5p
+  font-size: 0.95rem;
+  margin: 4px 0;
+  color: #4b3a2a;
 }
+
+.livre-card button {
+  background-color: #6b4226; /* marron foncé */
+  color: #fbeec1; /* texte beige clair */
+  border: none;
+  border-radius: 0px;
+  padding: 8px;
+  margin-top: 10px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.livre-card button:hover {
+  background-color: #a2672d; /* légèrement plus clair au hover */
+  transform: scale(1.05);
+}
+
+/* Effet survol sur toute la carte */
+.livre-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  background: linear-gradient(135deg, #f6d365, #fda085);
+}
+
+.catalogue-title {
+  text-align: center;
+  font-size: 2.5rem; /* plus grand */
+  font-weight: bolder;
+  margin: 30px 0;
+  background: linear-gradient(90deg, #f6d365, #6b4226, #f6d365); /* dégradé animé */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 3s ease infinite;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3); /* légère ombre pour relief */
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* === Fiche Livre === */
+
+.fiche-livre-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 25px;
+  background: linear-gradient(135deg, #fbeec1, #f6d365);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.fiche-livre-container h1 {
+  color: #6b4226; /* marron foncé */
+  font-size: 2rem;
+  margin-bottom: 15px;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.fiche-livre-container p {
+  font-size: 1rem;
+  color: #4b3a2a;
+  margin: 5px 0;
+}
+
+.fiche-livre-container button {
+  background-color: #6b4226;
+  color: #fbeec1;
+  border: none;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+}
+
+.fiche-livre-container button:hover:enabled {
+  background-color: #a2672d;
+  transform: scale(1.05);
+}
+
+.fiche-livre-container button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* === Mes emprunts === */
+.emprunts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.emprunt-card {
+  background: linear-gradient(135deg, #fbeec1, #f6d365);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.emprunt-card h3 {
+  font-size: 1.2rem;
+  color: #6b4226;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.emprunt-card p {
+  font-size: 0.95rem;
+  color: #4b3a2a;
+  margin: 4px 0;
+}
+
+.emprunt-card button {
+  background-color: #6b4226;
+  color: #fbeec1;
+  border: none;
+  padding: 8px;
+  margin-top: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.emprunt-card button:hover {
+  background-color: #a2672d;
+  transform: scale(1.05);
+}
+
+.emprunt-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.emprunts-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #6b4226;
+  margin: 30px 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* === Espace Utilisateur / Admin === */ 
+/* === Espace Utilisateur / Admin === */
+
+.espace-user-info {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 25px;
+  background: linear-gradient(135deg, #fbeec1, #f6d365);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.espace-user-info h2 {
+  color: #6b4226;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.espace-user-info p {
+  font-size: 1rem;
+  color: #4b3a2a;
+  margin: 4px 0;
+}
+
+.espace-user-info button {
+  background-color: #6b4226;
+  color: #fbeec1;
+  border: none;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.espace-user-info button:hover {
+  background-color: #a2672d;
+  transform: scale(1.05);
+}
+
+/* Partie admin : conteneur livres */
+.admin-livres {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.admin-livres h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #6b4226;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.admin-livres button {
+  background-color: #6b4226;
+  color: #fbeec1;
+  border: none;
+  padding: 8px 15px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-livres button:hover {
+  background-color: #a2672d;
+  transform: scale(1.05);
+}
+
+/* Livres en admin */
+.livres-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.livre-card {
+  background: linear-gradient(135deg, #fbeec1, #f6d365);
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: default;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.livre-card h3 {
+  color: #6b4226;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.livre-card p {
+  font-size: 0.95rem;
+  color: #4b3a2a;
+}
+
+.livre-card button {
+  background-color: #6b4226;
+  color: #fbeec1;
+  border: none;
+  padding: 8px;
+  margin-top: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.livre-card button:hover {
+  background-color: #a2672d;
+  transform: scale(1.05);
+}
+
+.livre-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* Partie utilisateur : emprunts */
+.espace-user-emprunts h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #6b4226;
+  margin: 30px 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.espace-user-emprunts p {
+  font-size: 1rem;
+  color: #4b3a2a;
+}
+
+.emprunts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.emprunt-card {
+  background: linear-gradient(135deg, #fbeec1, #f6d365);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.emprunt-card h3 {
+  font-size: 1.2rem;
+  color: #6b4226;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.emprunt-card p {
+  font-size: 0.95rem;
+  color: #4b3a2a;
+  margin: 4px 0;
+}
+
+.emprunt-card button {
+  background-color: #6b4226;
+  color: #fbeec1;
+  border: none;
+  padding: 8px;
+  margin-top: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.emprunt-card button:hover {
+  background-color: #a2672d;
+  transform: scale(1.05);
+}
+
+.emprunt-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* === Dashboard === */
+
+.dashboard-container {
+  max-width: 1400px; /* légèrement plus large */
+  margin: 30px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(520px, 1fr)); /* cartes plus larges */
+  gap: 25px;
+  padding: 20px;
+}
+
+.dashboard-card {
+  background-color: #e0e0e0; /* gris clair */
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.dashboard-card h2 {
+  color: #6b4226; /* marron foncé */
+  font-size: 1.5rem;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  margin-bottom: 10px;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* Police réduite pour les axes et labels Recharts */
+.dashboard-card .recharts-cartesian-axis-tick-value,
+.dashboard-card .recharts-pie-label-text {
+  font-size: 0.55rem !important;
+  fill: #4b3a2a;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: bold;
+}
+
+/* === Moyenne durée d'emprunt === */
+.moyenne-duree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.moyenne-duree .chiffre {
+  font-size: 4rem;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: bold;
+  color: #6b4226;
+  text-align: center;
+}
+
+.moyenne-duree .unite {
+  font-size: 1.5rem;
+  color: #4b3a2a;
+  text-align: center;
+}
+
+/* === Login / Register === */
+.login-container {
+  width: 380px;                  /* largeur fixe */
+  padding: 30px 25px;            /* padding intérieur */
+  margin: 60px auto 40px auto;   /* marge en haut et en bas */
+  background: linear-gradient(135deg, #fbeec1, #f6d365);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-sizing: border-box;
+}
+
+.login-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #6b4226;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  margin-bottom: 10px;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-container input,
+.login-container select {
+  width: 100%;                  /* rempli la largeur du conteneur */
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 2px solid #6b4226;
+  background-color: #fff8e1;
+  color: #4b3a2a;
+  font-family: 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.login-container input:focus,
+.login-container select:focus {
+  outline: none;
+  border-bottom: 2px solid #a2672d;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.login-container button[type="submit"] {
+  padding: 10px;
+  background-color: #6b4226;
+  color: #fbeec1;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.login-container button[type="submit"]:hover {
+  background-color: #a2672d;
+  transform: scale(1.05);
+}
+
+.login-container .switch-mode {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.login-container .switch-mode button {
+  background: none;
+  border: none;
+  color: #6b4226;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-container .switch-mode button:hover {
+  color: #a2672d;
+  text-decoration: underline;
+}
+
+.login-container p.error {
+  color: red;
+  text-align: center;
+  font-weight: bold;
+}
+
+
+/* === Footer simple === */
+.simple-footer {
+  background-color: #5a3e2b; /* marron foncé */
+  color: #f5f5dc;           /* beige clair */
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+/* Page login structurée pour footer collé en bas */
+.login-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Le contenu occupe l’espace restant */
+.login-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centre verticalement */
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* Footer toujours en bas */
+footer {
+  margin-top: auto;
+}
+

@@ -1,66 +1,136 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { loginUser } from "../api/utilisateurs";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null); // peut être string ou objet
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null); // reset erreur à chaque submit
-    try {
-      const data = await loginUser(email, password);
-      login(data.token, data.user);
-      navigate("/espace-utilisateur"); // au lieu de /catalogue
-; // redirige vers le catalogue après login
-    } catch (err) {
-      // err peut être un objet provenant de Axios/FastAPI
-      if (err.response && err.response.data) {
-        setError(err.response.data); 
-      } else {
-        setError("Erreur lors de la connexion");
-      }
-    }
+  const [mode, setMode] = useState("login"); // "login" ou "register"
+  const [formData, setFormData] = useState({
+    nom: "",
+    prenom: "",
+    email: "",
+    mot_de_passe: "",
+    role: "etudiant",
+  });
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const renderError = () => {
-    if (!error) return null;
-    if (typeof error === "string") return error;
-    if (typeof error === "object") {
-      // Affiche le message principal de l'objet d'erreur
-      return error.detail || error.msg || JSON.stringify(error);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      let url = "http://localhost:8000/utilisateurs/";
+      let options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      };
+
+      if (mode === "login") {
+        url += "login";
+        const res = await fetch(url, options);
+        const data = await res.json();
+        if (!res.ok) throw data;
+        login(data.token, data.user);
+        navigate("/espace-utilisateur");
+      } else {
+        const res = await fetch(url, options);
+        const data = await res.json();
+        if (!res.ok) throw data;
+        alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+        setMode("login");
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.detail) setError(err.detail);
+      else setError("Erreur serveur");
     }
-    return "Erreur inconnue";
   };
 
   return (
-    <div>
-      <h2>Connexion</h2>
-      {error && <p style={{ color: "red" }}>{renderError()}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Se connecter</button>
-      </form>
-    </div>
-  );
+  <div className="login-page">
+      <Header />
+
+      <div className="login-container">
+        <h2>{mode === "login" ? "Connexion" : "Inscription"}</h2>
+        {error && <p className="error">{error}</p>}
+        
+        <form onSubmit={handleSubmit}>
+          {mode === "register" && (
+            <>
+              <input
+                type="text"
+                name="nom"
+                placeholder="Nom"
+                value={formData.nom}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="text"
+                name="prenom"
+                placeholder="Prénom"
+                value={formData.prenom}
+                onChange={handleChange}
+                required
+              />
+            </>
+          )}
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            type="password"
+            name="mot_de_passe"
+            placeholder="Mot de passe"
+            value={formData.mot_de_passe}
+            onChange={handleChange}
+            required
+          />
+
+          {mode === "register" && (
+            <select name="role" value={formData.role} onChange={handleChange}>
+              <option value="etudiant">Étudiant</option>
+              <option value="professeur">Professeur</option>
+              <option value="admin">Admin</option>
+            </select>
+          )}
+
+          <button type="submit">
+            {mode === "login" ? "Se connecter" : "S'inscrire"}
+          </button>
+        </form>
+
+        <div className="switch-mode">
+          <p>
+            {mode === "login" ? "Pas encore inscrit ?" : "Déjà inscrit ?"}{" "}
+            <button onClick={() => setMode(mode === "login" ? "register" : "login")}>
+              {mode === "login" ? "Créer un compte" : "Se connecter"}
+            </button>
+          </p>
+        </div>
+      </div>
+
+      <Footer />
+  </div>
+);
+
 };
 
 export default Login;
