@@ -16,19 +16,18 @@ const EspaceUtilisateur = () => {
     stock: 1
   });
 
+  // Chargement des données utilisateur/admin
   useEffect(() => {
     if (!user) return;
 
     if (user.role !== "admin") {
-      // Récupérer les emprunts de l'utilisateur
       fetch(`http://localhost:8000/emprunts/user/${user._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then(res => res.json())
-        .then(data => setEmprunts(Array.isArray(data) ? data : (data.emprunts || [])))
+        .then(data => setEmprunts(Array.isArray(data) ? data : []))
         .catch(err => console.error(err));
     } else {
-      // Récupérer tous les livres pour l'admin
       fetch(`http://localhost:8000/livres`, {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -38,44 +37,48 @@ const EspaceUtilisateur = () => {
     }
   }, [user, token]);
 
-  // Fonction pour rendre un livre
-const rendreLivre = async (idEmprunt) => {
-  try {
-    const res = await fetch("http://localhost:8000/emprunts/rendre", {
-      method: "POST",                   // POST obligatoire
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ emprunt_id: parseInt(idEmprunt) }),  // parseInt très important
-    });
+  // Rendre un livre (avec index_emprunt)
+  const rendreLivre = async (index) => {
+    try {
+      const res = await fetch("http://localhost:8000/emprunts/rendre", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          utilisateur_id: user._id,
+          index_emprunt: index
+        }),
+      });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      alert(errorData.detail || "Erreur lors du rendu du livre");
-      return;
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.detail || "Erreur lors du rendu du livre");
+        return;
+      }
+
+      // Mise à jour de la liste locale
+      setEmprunts(prev => prev.filter((_, i) => i !== index));
+
+    } catch (err) {
+      console.error("Erreur serveur :", err);
+      alert("Erreur serveur");
     }
+  };
 
-    const data = await res.json();
-    // Supprimer l’emprunt rendu de la liste locale
-    setEmprunts(prev => prev.filter(e => e._id !== idEmprunt));
-    console.log("Livre rendu :", data);
-  } catch (err) {
-    console.error("Erreur serveur :", err);
-    alert("Erreur serveur : impossible de contacter le backend");
-  }
-};
-
-
+  // Déconnexion
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
+  // Ajout d'un livre (admin)
   const handleAddLivre = () => {
     fetch("http://localhost:8000/livres", {
       method: "POST",
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
@@ -84,20 +87,25 @@ const rendreLivre = async (idEmprunt) => {
       .then(res => res.json())
       .then(data => {
         setLivres(prev => [...prev, data.livre]);
-        setNewLivre({ titre: "", auteur_id: "", categorie_id: "", annee: "", stock: 1 });
+        setNewLivre({
+          titre: "",
+          auteur_id: "",
+          categorie_id: "",
+          annee: "",
+          stock: 1
+        });
       })
       .catch(err => console.error(err));
   };
 
-  if (!user) {
-    return <p>Chargement...</p>;
-  }
+  if (!user) return <p>Chargement...</p>;
 
   return (
     <div>
       <Header />
       <h1>{user.role === "admin" ? "Espace Admin" : "Espace Utilisateur"}</h1>
 
+      {/* Infos utilisateur */}
       <div className="espace-user-info">
         <h2>Mes informations</h2>
         <p><strong>Nom :</strong> {user.nom}</p>
@@ -106,6 +114,9 @@ const rendreLivre = async (idEmprunt) => {
         <button onClick={handleLogout}>Se déconnecter</button>
       </div>
 
+      {/* -------------------------------------- */}
+      {/* ADMIN : gestion des livres             */}
+      {/* -------------------------------------- */}
       {user.role === "admin" ? (
         <div className="admin-livres">
           <h2>Gestion des livres</h2>
@@ -145,33 +156,67 @@ const rendreLivre = async (idEmprunt) => {
             <button onClick={handleAddLivre}>Ajouter le livre</button>
           </div>
 
+          {/* Liste des livres */}
           <div className="livres-container">
             {livres.map(livre => (
               <div key={livre._id} className="livre-card">
-                <h3>{livre.titre}</h3>
-                <p>Auteur: {livre.auteur}</p>
-                <p>Catégorie: {livre.categorie_nom}</p>
-                <p>Année: {livre.annee}</p>
-                <p>Stock: {livre.stock}</p>
-                <p>Disponibilité: {livre.disponible ? "Disponible" : "Indisponible"}</p>
+                <h3>{livre.titre || "Livre inconnu"}</h3>
+
+                <p>Auteur : 
+                  {livre.auteur?.nom
+                    ? livre.auteur.nom
+                    : livre.auteur_id
+                      ? "ID: " + livre.auteur_id
+                      : "Inconnu"}
+                </p>
+
+                <p>Catégorie :
+                  {livre.categorie?.nom
+                    ? livre.categorie.nom
+                    : livre.categorie_id
+                      ? "ID: " + livre.categorie_id
+                      : "Inconnue"}
+                </p>
+
+                <p>Année : {livre.annee}</p>
+                <p>Stock : {livre.stock}</p>
+                <p>Disponibilité : {livre.disponible ? "Disponible" : "Indisponible"}</p>
               </div>
             ))}
           </div>
         </div>
+
       ) : (
+        /* -------------------------------------- */
+        /* UTILISATEUR : emprunts                  */
+        /* -------------------------------------- */
         <div className="espace-user-emprunts">
           <h2>Mes emprunts</h2>
+
           {emprunts.length === 0 ? (
             <p>Aucun emprunt pour le moment.</p>
           ) : (
             <div className="emprunts-container">
-              {emprunts.map(e => (
-                <div key={e._id} className="emprunt-card">
-                  <h3>{e.livre?.titre || "Livre inconnu"}</h3>
-                  <p><strong>Date d’emprunt :</strong> {new Date(e.date_emprunt).toLocaleDateString()}</p>
-                  <p><strong>Retour prévu :</strong> {new Date(e.date_retour).toLocaleDateString()}</p>
-                  <p><strong>Statut :</strong> {e.statut === "retard" ? "En retard" : e.statut === "rendu" ? "Rendu" : "En cours"}</p>
-                  <button onClick={() => rendreLivre(e._id)}>Rendre le livre</button>
+              {emprunts.map((e, index) => (
+                <div key={index} className="emprunt-card">
+                  <h3>{e.titre || "Livre inconnu"}</h3>
+
+                  <p><strong>Date d’emprunt :</strong>
+                    {new Date(e.date_emprunt).toLocaleDateString()}
+                  </p>
+
+                  <p><strong>Retour prévu :</strong>
+                    {new Date(e.date_retour).toLocaleDateString()}
+                  </p>
+
+                  <p><strong>Statut :</strong>
+                    {e.statut === "retard" ? "En retard" :
+                     e.statut === "rendu" ? "Rendu" : "En cours"}
+                  </p>
+
+                  <button onClick={() => rendreLivre(index)}>
+                    Rendre le livre
+                  </button>
                 </div>
               ))}
             </div>

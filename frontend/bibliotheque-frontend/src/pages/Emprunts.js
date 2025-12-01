@@ -23,34 +23,35 @@ const Emprunts = () => {
   }, [user, token]);
 
   // Fonction pour rendre un livre
-const rendreLivre = async (idEmprunt) => {
-  try {
-    const res = await fetch("http://localhost:8000/emprunts/rendre", {
-      method: "POST",                   // POST obligatoire
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ emprunt_id: parseInt(idEmprunt) }),  // parseInt très important
-    });
+  const rendreLivre = async (indexEmprunt) => {
+    try {
+      const res = await fetch("http://localhost:8000/emprunts/rendre", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          utilisateur_id: user._id,
+          index_emprunt: indexEmprunt,
+        }),
+      });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      alert(errorData.detail || "Erreur lors du rendu du livre");
-      return;
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert(errorData.detail || "Erreur lors du rendu du livre");
+        return;
+      }
+
+      const data = await res.json();
+      // Supprimer l’emprunt rendu de la liste locale
+      setEmprunts((prev) => prev.filter((_, i) => i !== indexEmprunt));
+      console.log("Livre rendu :", data);
+    } catch (err) {
+      console.error("Erreur serveur :", err);
+      alert("Erreur serveur : impossible de contacter le backend");
     }
-
-    const data = await res.json();
-    // Supprimer l’emprunt rendu de la liste locale
-    setEmprunts(prev => prev.filter(e => e._id !== idEmprunt));
-    console.log("Livre rendu :", data);
-  } catch (err) {
-    console.error("Erreur serveur :", err);
-    alert("Erreur serveur : impossible de contacter le backend");
-  }
-};
-
-
+  };
 
   if (!user) return <p>Chargement...</p>;
 
@@ -63,9 +64,9 @@ const rendreLivre = async (idEmprunt) => {
         <p style={{ textAlign: "center" }}>Aucun emprunt pour le moment.</p>
       ) : (
         <div className="emprunts-container">
-          {emprunts.map((e) => (
-            <div key={e._id} className="emprunt-card">
-              <h3>{e.livre?.titre || "Livre inconnu"}</h3>
+          {emprunts.map((e, i) => (
+            <div key={i} className="emprunt-card">
+              <h3>{e.titre || "Livre inconnu"}</h3>
               <p>
                 <strong>Date d’emprunt :</strong>{" "}
                 {new Date(e.date_emprunt).toLocaleDateString()}
@@ -82,7 +83,7 @@ const rendreLivre = async (idEmprunt) => {
                   ? "Rendu"
                   : "En cours"}
               </p>
-              <button onClick={() => rendreLivre(e._id)}>Rendre le livre</button>
+              <button onClick={() => rendreLivre(i)}>Rendre le livre</button>
             </div>
           ))}
         </div>

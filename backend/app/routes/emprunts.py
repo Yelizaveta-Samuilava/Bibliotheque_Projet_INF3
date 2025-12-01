@@ -1,194 +1,156 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from datetime import date, datetime, timedelta
-from typing import Optional, List
-from bson import ObjectId
 from datetime import datetime, timedelta
-from database import livres, utilisateurs, emprunts
-from models.emprunt import Emprunt
 
-router = APIRouter(
-    prefix="/emprunts",
-    tags=["Emprunts"]
-)
+from database import utilisateurs, livres, emprunts  # ajouter 'emprunts'
+from models.utilisateur import EmpruntEmbedded
+
+router = APIRouter(prefix="/emprunts", tags=["Emprunts"])
 
 MAX_DUREE_JOURS = 15
 
-#SCHEMAS POUR LES REQUÊTES
+
 class EmprunterRequest(BaseModel):
     utilisateur_id: int
     livre_id: int
 
 
 class RendreRequest(BaseModel):
-    emprunt_id: int
-
-class RendreResponse(BaseModel):
-    emprunt: dict # ou Emprunt si tu veux
-    livre_id: int
-    livre_stock: int
-    livre_disponible: bool
+    utilisateur_id: int
+    index_emprunt: int  # index dans la liste utilisateur.emprunts
 
 
-def get_next_id(collection):
-    last = collection.find_one(sort=[("_id", -1)])
-    return (last["_id"] + 1) if last else 1
-
-
-def to_iso(d):
-    if d is None:
-        return None
-    if isinstance(d, (datetime, date)):
-        return d.isoformat()
-    return d
-
-
-def serialize_emprunt(e):
-    return {
-        "_id": e["_id"], 
-        "utilisateur_id": e["utilisateur_id"],
-        "livre_id": e["livre_id"],
-        "date_emprunt": to_iso(e.get("date_emprunt")),
-        "date_retour": to_iso(e.get("date_retour")),
-        "statut": e.get("statut"),
-    }
-
-
-# ROUTES
-
-# POST /emprunts/emprunter
-@router.post("/emprunter", response_model=Emprunt)
-def emprunter_livre(req: EmprunterRequest):
-
-    # Vérifier utilisateur
-    user = utilisateurs.find_one({"_id": req.utilisateur_id})
-    if not user:
-        raise HTTPException(status_code=404, detail="Utilisateur introuvable")
-
-    # Vérifier livre
-    livre = livres.find_one({"_id": req.livre_id})
-    if not livre:
-        raise HTTPException(status_code=404, detail="Livre introuvable")
-    if livre.get("stock", 0) <= 0:
-        raise HTTPException(status_code=400, detail="Livre non disponible")
-
-    # Créer emprunt
-    new_id = get_next_id(emprunts)
-    emprunt_doc = {
-        "_id": new_id,
-        "utilisateur_id": req.utilisateur_id,
-        "livre_id": req.livre_id,
-        "date_emprunt": datetime.now(),
-        "date_retour": datetime.now() + timedelta(weeks=2),
-        "statut": "en cours",
-    }
-    emprunts.insert_one(emprunt_doc)
-
-    # Diminuer stock
-    livres.update_one({"_id": req.livre_id}, {"$inc": {"stock": -1}})
-
-    # Mettre à jour disponibilité
-    livre_after = livres.find_one({"_id": req.livre_id})
-    livres.update_one(
-        {"_id": req.livre_id},
-        {"$set": {"disponible": livre_after["stock"] > 0}}
-    )
-
-    return Emprunt(**serialize_emprunt(emprunt_doc))
-
-
-
-# POST /emprunts/rendre
-@router.post("/rendre", response_model=RendreResponse)
-@router.post("/rendre", response_model=RendreResponse)
-def rendre_livre(req: RendreRequest):
-    e = emprunts.find_one({"_id": req.emprunt_id})
-    if not e:
-        raise HTTPException(status_code=404, detail="Emprunt introuvable")
-
-    if e["statut"] != "en cours":
-        raise HTTPException(status_code=400, detail="Cet emprunt n'est pas en cours")
-
-    maintenant = datetime.now()
-
-    # ⚡ Convertir date_emprunt en datetime si c'est une string
-    date_emprunt_dt = (
-        datetime.fromisoformat(e["date_emprunt"])
-        if isinstance(e["date_emprunt"], str)
-        else e["date_emprunt"]
-    )
-
-    duree = (maintenant - date_emprunt_dt).days
-    statut_final = "retard" if duree > MAX_DUREE_JOURS else "rendu"
-
-    # Mettre à jour l'emprunt
-    emprunts.update_one(
-        {"_id": req.emprunt_id},
-        {"$set": {"date_retour": maintenant.isoformat(), "statut": statut_final}}
-    )
-
-    # Mettre à jour le stock du livre
-    livres.update_one({"_id": e["livre_id"]}, {"$inc": {"stock": 1}})
-    livres.update_one({"_id": e["livre_id"]}, {"$set": {"disponible": True}})
-
-    updated = emprunts.find_one({"_id": req.emprunt_id})
-    livre_after = livres.find_one({"_id": e["livre_id"]})
-
-    return {
-        "emprunt": serialize_emprunt(updated),
-        "livre_id": livre_after["_id"],
-        "livre_stock": livre_after["stock"],
-        "livre_disponible": livre_after["disponible"]
-    }
-
-# GET /emprunts
-
-@router.get("/", response_model=List[Emprunt])
-def lister_emprunts():
-    liste = list(emprunts.find())
-    return [Emprunt(**serialize_emprunt(e)) for e in liste]
-
-
-# GET /emprunts/retards
-
-@router.get("/retards", response_model=List[Emprunt])
-def emprunts_en_retard():
-    limite = datetime.now() - timedelta(days=MAX_DUREE_JOURS)
-
-    # Pipeline pour convertir date_emprunt si c'est stocké en string
-    pipeline = [
-        {"$match": {"statut": "en cours"}},
-        {"$addFields": {"date_emprunt_dt": {"$toDate": "$date_emprunt"}}},
-        {"$match": {"date_emprunt_dt": {"$lt": limite}}}
-    ]
-
-    retard = list(emprunts.aggregate(pipeline))
-
-    if retard:
-        emprunts.update_many(
-            {"_id": {"$in": [e["_id"] for e in retard]}},
-            {"$set": {"statut": "retard"}}
-        )
-
-    updated = list(emprunts.find({"statut": "retard"}))
-    return [Emprunt(**serialize_emprunt(e)) for e in updated]
-
-@router.get("/user/{user_id}")
-def emprunts_par_utilisateur(user_id: int):
+def get_user(user_id: int):
     user = utilisateurs.find_one({"_id": user_id})
     if not user:
-        raise HTTPException(status_code=404, detail="Utilisateur introuvable")
+        raise HTTPException(404, "Utilisateur introuvable")
+    return user
 
-    user_emprunts = list(emprunts.find({"utilisateur_id": user_id}))
 
-    # Ajouter le livre correspondant à chaque emprunt
-    resultat = []
-    for e in user_emprunts:
-        livre = livres.find_one({"_id": e["livre_id"]})
-        emprunt_serialized = serialize_emprunt(e)
-        emprunt_serialized["livre"] = {
-            "titre": livre["titre"]
-        } if livre else {"titre": "Livre inconnu"}
-        resultat.append(emprunt_serialized)
+# -------------------------------
+# ROUTE : emprunter
+# -------------------------------
+@router.post("/emprunter")
+def emprunter_livre(req: EmprunterRequest):
 
-    return resultat
+    user = get_user(req.utilisateur_id)
+    livre = livres.find_one({"_id": req.livre_id})
+
+    if not livre:
+        raise HTTPException(404, "Livre introuvable")
+    if livre.get("stock", 0) <= 0:
+        raise HTTPException(400, "Livre non disponible")
+
+    #Document pour l'utilisateur
+    emprunt_user = EmpruntEmbedded(
+        livre_id=req.livre_id,
+        date_emprunt=datetime.now(),
+        date_retour=datetime.now() + timedelta(days=15),
+        statut="en cours"
+    )
+
+    emprunt_doc = {
+        "utilisateur_id": req.utilisateur_id,
+        "livre_id": req.livre_id,
+        "date_emprunt": emprunt_user.date_emprunt,
+        "date_retour": emprunt_user.date_retour,
+        "statut": "en cours"
+    }
+
+    emprunts.insert_one(emprunt_doc)
+
+  
+    utilisateurs.update_one(
+        {"_id": req.utilisateur_id},
+        {"$push": {"emprunts": emprunt_user.dict()}}
+    )
+
+    #Mettre à jour stock
+    livres.update_one({"_id": req.livre_id}, {"$inc": {"stock": -1}})
+    livres.update_one({"_id": req.livre_id}, {"$set": {"disponible": livre["stock"] > 1}})
+
+    return {"message": "Emprunt enregistré", "emprunt": emprunt_user}
+
+
+# -------------------------------
+# ROUTE : rendre
+# -------------------------------
+@router.post("/rendre")
+def rendre_livre(req: RendreRequest):
+
+    user = get_user(req.utilisateur_id)
+
+    if req.index_emprunt >= len(user.get("emprunts", [])):
+        raise HTTPException(400, "Index d'emprunt invalide")
+
+    emprunt = user["emprunts"][req.index_emprunt]
+
+    if emprunt["statut"] != "en cours":
+        raise HTTPException(400, "Cet emprunt n'est pas en cours")
+
+    date_emprunt = datetime.fromisoformat(emprunt["date_emprunt"]) \
+        if isinstance(emprunt["date_emprunt"], str) else emprunt["date_emprunt"]
+
+    retard = (datetime.now() - date_emprunt).days > MAX_DUREE_JOURS
+
+    utilisateurs.update_one(
+        {"_id": req.utilisateur_id},
+        {
+            "$set": {
+                f"emprunts.{req.index_emprunt}.statut": "retard" if retard else "rendu",
+                f"emprunts.{req.index_emprunt}.date_retour": datetime.now()
+            }
+        }
+    )
+
+    emprunts.update_one(
+        {"utilisateur_id": req.utilisateur_id, "livre_id": emprunt["livre_id"], "statut": "en cours"},
+        {"$set": {
+            "statut": "retard" if retard else "rendu",
+            "date_retour": datetime.now()
+        }}
+    )
+
+    #Mettre à jour stock
+    livres.update_one({"_id": emprunt["livre_id"]}, {"$inc": {"stock": +1}})
+    livres.update_one({"_id": emprunt["livre_id"]}, {"$set": {"disponible": True}})
+
+    return {"message": "Livre rendu", "retard": retard}
+
+
+# -------------------------------
+# ROUTE : liste par utilisateur
+# -------------------------------
+@router.get("/user/{user_id}")
+def emprunts_par_utilisateur(user_id: int):
+    user = get_user(user_id)
+    emprunts_liste = []
+
+    for emp in user.get("emprunts", []):
+        livre = livres.find_one({"_id": emp["livre_id"]})
+        emprunts_liste.append({
+            "livre_id": emp["livre_id"],
+            "titre": livre["titre"] if livre else "Titre inconnu",
+            "date_emprunt": emp["date_emprunt"],
+            "date_retour": emp.get("date_retour"),
+            "statut": emp["statut"]
+        })
+
+    return emprunts_liste
+
+
+# -------------------------------
+# ROUTE : retards
+# -------------------------------
+@router.get("/retards/{user_id}")
+def retards_utilisateur(user_id: int):
+    user = get_user(user_id)
+    en_retard = []
+
+    for e in user.get("emprunts", []):
+        date_emprunt = datetime.fromisoformat(e["date_emprunt"]) \
+            if isinstance(e["date_emprunt"], str) else e["date_emprunt"]
+        if e["statut"] == "en cours" and (datetime.now() - date_emprunt).days > MAX_DUREE_JOURS:
+            en_retard.append(e)
+
+    return en_retard

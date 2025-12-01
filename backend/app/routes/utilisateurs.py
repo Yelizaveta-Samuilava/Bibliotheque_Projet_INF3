@@ -23,7 +23,8 @@ def add_utilisateur(data: Utilisateur):
     # Définir l'_id du nouvel utilisateur
     data_dict = data.dict()
     data_dict["_id"] = (dernier_utilisateur["_id"] + 1) if dernier_utilisateur else 1
-    
+    data_dict["emprunts"] = []
+
     utilisateurs.insert_one(data_dict)
     return {"message": "Utilisateur ajouté", "id": data_dict["_id"]}
 
